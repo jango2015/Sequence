@@ -33,13 +33,13 @@ namespace getAddress.Sequence.Mongodb
 
             base.Add(sequenceEntity);
 
-            return new SequenceKey { Value = rowKey.ToString() };
+            return await Task.FromResult(new SequenceKey { Value = rowKey.ToString() });
         }
 
         public async Task<ISequence> GetAsync(SequenceKey sequenceKey)
         {
             var sequenceEntity = base.GetById(sequenceKey.Value);
-            return sequenceEntity;
+            return await Task.FromResult(sequenceEntity);
         }
 
         public async Task<bool> UpdateAsync(SequenceKey sequenceKey, ISequence sequence)
@@ -52,7 +52,7 @@ namespace getAddress.Sequence.Mongodb
 
             var updatedSequenceEntity = this.Collection.FindAndModify(new FindAndModifyArgs() {  Query = query, Update = update, VersionReturned = FindAndModifyDocumentVersion.Original, SortBy = null });
             var doc = updatedSequenceEntity.ModifiedDocument;
-            return doc != null;
+            return await Task.FromResult(doc != null);
      
         }
 
